@@ -1,9 +1,47 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Title = ({text}) => (<h1>{text}</h1>)
-const Button = ({text,handleClick}) => (<button onClick={handleClick}>{text}</button>)
-const Statistic = ({name,number}) => (<p>{name} {number}</p>)
+const Title = ({text}) => (
+  <h1>{text}</h1>
+)
+
+const Button = ({text,handleClick}) => (
+  <button onClick={handleClick}>{text}</button>
+)
+
+const Statistic = ({name,value}) =>{ 
+  value = name === "positive" ? value + '%' : value
+  return(
+    <>
+      <td>{name}</td>
+      <td>{value}</td>
+    </>
+  )
+}
+const Statistics = ({good,neutral,bad}) =>{
+  if (good || neutral || bad){
+    return (
+      <div>
+        <table>
+          <tbody>
+            <tr><Statistic name="good" value={good}/></tr>
+            <tr><Statistic name="neutral" value={neutral}/></tr>
+            <tr><Statistic name="bad" value={bad}/></tr>
+            <tr><Statistic name="all" value={good + neutral + bad}/></tr>
+            <tr><Statistic name="average" value={(good - bad) / (good + neutral + bad)}/></tr>
+            <tr><Statistic name="positive" value={good * 100 / (good + neutral + bad)}/></tr>
+          </tbody>
+        </table>
+      </div>
+    )
+  }else{
+    return(
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
+  }
+}
 
 const App = () => {
   // save clicks of each button to own state
@@ -26,12 +64,8 @@ const App = () => {
 
       <Title text="statistics"/>
 
-      <Statistic name="good" number={good}/>
-      <Statistic name="neutral" number={neutral}/>
-      <Statistic name="bad" number={bad}/>
-      <Statistic name="all" number={good + neutral + bad}/>
-      <Statistic name="average" number={(good - bad) / (good + neutral + bad)}/>
-      <Statistic name="positive" number={good * 100 / (good + neutral + bad)}/>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
+      
     </div>
   )
 }
